@@ -1,0 +1,1 @@
+<?php require(tb_modification($theme_widgets_dir . '/_products_listing.tpl')); ?>

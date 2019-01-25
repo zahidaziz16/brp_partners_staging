@@ -1,0 +1,326 @@
+<modification>
+    <id>BurnEngine SEO extension</id>
+    <version>1.2.6</version>
+    <vqmver>2.1.6</vqmver>
+    <author>ThemeBurn.com</author>
+
+    <file name="system/startup.php">
+        <operation>
+            <search position="after"><![CDATA[
+            error_reporting(E_ALL);
+            ]]></search>
+            <add><![CDATA[
+            define('TB_SEO_MOD', 1.0);
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/common/seo_url.php">
+        <operation>
+            <search position="after"><![CDATA[
+            class ControllerCommonSeoUrl extends Controller {
+            ]]></search>
+            <add><![CDATA[
+            private $url_prefix;
+            private $language_id;
+            public static $new_route;
+            public static $pretty_urls;
+            public static $use_original_table = null;
+            public static $use_original_table_fallback;
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            public function index() {
+            ]]></search>
+            <add><![CDATA[
+            public function setUrlLanguageCode($language_code)
+            {
+                $this->url_prefix = !empty($language_code) ? (string) $language_code . '/' : '';
+            }
+            public function setUrlLanguageId($language_id)
+            {
+                $this->language_id = (int) $language_id;
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            public function index() {
+            ]]></search>
+            <add><![CDATA[
+            if($this->registry->get('tbEngine') instanceof TB_Engine) {
+                $this->registry->get('tbEngine')->getEventDispatcher()->notify(new sfEvent($this, 'oc:ControllerCommonSeoUrl/index'));
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            parse_str($url_info['query'], $data);
+            ]]></search>
+            <add><![CDATA[
+            $data2 = $data;
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            return $url
+            ]]></search>
+            <add><![CDATA[
+            $url = '/' . $this->url_prefix . ltrim($url, '/');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($part) . "'");
+            ]]></search>
+            <add><![CDATA[
+            $use_original_table = null !== self::$use_original_table ? self::$use_original_table : true;
+            if (!$use_original_table) {
+                $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "burnengine_url_alias WHERE keyword = '" . $this->db->escape($part) . "' AND language_id = " . $this->language_id);
+                if (!$query->num_rows && self::$use_original_table_fallback) {
+                    $use_original_table = true;
+                }
+            }
+            if ($use_original_table) {
+                $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($part) . "'");
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "'");
+            ]]></search>
+            <add><![CDATA[
+            $use_original_table = null !== self::$use_original_table ? self::$use_original_table : true;
+            if (!$use_original_table) {
+                $query2 = $this->db->query("SELECT * FROM " . DB_PREFIX . "burnengine_url_alias WHERE `query` = '" . $key . '=' . (int) $value . "' AND language_id = " . $this->language_id);
+                if ($query2->num_rows or !self::$use_original_table_fallback) {
+                    $query = $query2;
+                }
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'category_id=" . (int)$category . "'");
+            ]]></search>
+            <add><![CDATA[
+            $use_original_table = null !== self::$use_original_table ? self::$use_original_table : true;
+            if (!$use_original_table) {
+                $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "burnengine_url_alias WHERE `query` = 'category_id=" . (int) $category . "' AND language_id = " . $this->language_id);
+                if (!$query->num_rows && self::$use_original_table_fallback) {
+                    $use_original_table = true;
+                }
+            }
+            if ($use_original_table) {
+                $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'category_id=" . (int)$category . "'");
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            foreach ($parts as $part) {
+            ]]></search>
+            <add><![CDATA[
+            null !== self::$new_route && $parts = array();
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            if (isset($this->request->get['route'])) {
+            ]]></search>
+            <add><![CDATA[
+            null !== self::$new_route && ($this->request->get['route'] = self::$new_route);
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            if ($url)
+            ]]></search>
+            <add><![CDATA[
+            if (self::$pretty_urls) {
+                if (empty($url) && !empty($data['route'])) {
+                    $url = '/' . $data['route'];
+
+                    if ($url == '/product/category') {
+                        $data['path'] = $data2['path'];
+                    }
+                }
+                $url == '/common/home' && ($url = '/');
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/catalog/information.php">
+        <operation>
+            <search position="repalce"><![CDATA[
+            'description' => $result['description']
+            ]]></search>
+            <add><![CDATA[
+            'description' => $result['description'],
+            'meta_description' => $result['meta_description'],
+            'meta_title' => $result['meta_title']
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/catalog/information_form.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+            <span class="error"><?php echo $error_description[$language['language_id']]; ?></span>
+            ]]></search>
+            <add><![CDATA[
+            <?php } ?></td>
+            </tr>
+            <?php $entry_meta_description = 'Meta Description'; ?>
+            <tr>
+              <td><?php echo $entry_meta_description; ?></td>
+              <td><textarea name="information_description[<?php echo $language['language_id']; ?>][meta_description]" cols="40" rows="5"><?php echo isset($information_description[$language['language_id']]) ? $information_description[$language['language_id']]['meta_description'] : ''; ?></textarea>
+            <?php if(true) { ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/catalog/" name="product_form.tpl,category_form.tpl,manufacturer_form.tpl,information_form.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+            <input type="text" name="keyword" value="<?php echo $keyword; ?>" />
+            ]]></search>
+            <add><![CDATA[
+                <?php
+                    $language_keywords = false;
+                    if (defined('TB_SEO_MOD') && class_exists('TB_Engine') && TB_Engine::hasInstance()) {
+                        $seo_settings = TB_Engine::instance()->getThemeData()->getSeoSettings();
+                        if ($seo_settings['multilingual_keywords']) {
+                            $language_keywords = TB_Engine::instance()->getThemeData()->getItemLanguageKeywords();
+                        }
+                    }
+
+                ?>
+                <input type="text" name="keyword" value="<?php echo $keyword; ?>" />
+                <?php if ($language_keywords): ?>
+                    <img src="<?php echo $language_keywords['original']['url']; ?><?php echo $language_keywords['original']['image']; ?>" title="<?php echo $language_keywords['original']['name']; ?>" /><br />
+                    <?php foreach($language_keywords['additional'] as $language ) { ?>
+                        <input type="text" name="language_keyword[<?php echo $language['id']; ?>]" value="<?php echo $language['keyword']; ?>" /> <img src="<?php echo $language_keywords['original']['url']; ?><?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /><br />
+                    <?php } ?>
+                    <style type="text/css">input[name="keyword"], input[name^="language_keyword"] { width: 350px !important; }</style>
+				<?php endif; ?>
+			]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/catalog/" name="product_form.tpl,category_form.tpl,information_form.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <td><?php echo $entry_meta_description; ?></td>
+            ]]></search>
+            <add><![CDATA[
+                <td>Meta Title</td>
+                <?php list($entity_name) = explode('_', trim(str_replace(implode('_', explode('_', basename(__FILE__, '.tpl'), -2)), '', basename(__FILE__, '.tpl')), '_')); ?>
+                <td><textarea name="<?php echo $entity_name; ?>_description[<?php echo $language['language_id']; ?>][meta_title]" cols="40" rows="5"><?php echo isset(${$entity_name . '_description'}[$language['language_id']]) ? ${$entity_name . '_description'}[$language['language_id']]['meta_title'] : ''; ?></textarea></td>
+            </tr>
+            <tr>
+			]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/model/catalog/" name="product.php,category.php,manufacturer.php,information.php">
+        <operation>
+            <search position="before"><![CDATA[
+            if ($data['keyword']) {
+            ]]></search>
+            <add><![CDATA[
+            if (defined('TB_SEO_MOD') && class_exists('TB_Engine')) {
+                $query = '';
+                $entity_name = '';
+                $entity_id = '';
+                foreach (array('ModelCatalogProduct' => 'product', 'ModelCatalogCategory' => 'category', 'ModelCatalogManufacturer' => 'manufacturer', 'ModelCatalogInformation' => 'information') as $entity_class => $entity_name) {
+                    if (get_class($this) == $entity_class && !empty(${$entity_name . '_id'})) {
+                        $entity_id = (int) ${$entity_name . '_id'};
+                        break;
+                    }
+                }
+                $data = TB_Engine::instance()->getThemeData()->insertItemLanguageKeywords($data, $entity_name, $entity_id);
+                $event = new sfEvent($this, 'oc:updateEntity', array(
+                    'entity_name' => $entity_name,
+                    'entity_id'   => $entity_id,
+                    'data'        => $data
+                ));
+                TB_Engine::instance()->getEventDispatcher()->notify($event);
+            }
+			]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/model/catalog/" name="product.php,category.php">
+        <operation>
+            <search position="before"><![CDATA[
+            'meta_keyword'     => $result['meta_keyword'],
+            ]]></search>
+            <add><![CDATA[
+            'meta_title' => $result['meta_title'],
+			]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/catalog/product.php">
+        <operation>
+            <search position="repalce"><![CDATA[
+            'meta_description' => $query->row['meta_description']
+            ]]></search>
+            <add trim="true"><![CDATA[
+            'meta_description' => $query->row['meta_description'],
+            'meta_title' => $query->row['meta_title']
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/product/category.php">
+        <operation>
+            <search position="after"><![CDATA[
+            $this->document->setTitle($category_info['name']);
+            ]]></search>
+            <add trim="true"><![CDATA[
+            $this->document->setTitle(!empty($category_info['meta_title']) ? $category_info['meta_title'] : $category_info['name']);
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/product/product.php">
+        <operation>
+            <search position="after"><![CDATA[
+            $this->document->setTitle($product_info['name']);
+            ]]></search>
+            <add trim="true"><![CDATA[
+            $this->document->setTitle(!empty($product_info['meta_title']) ? $product_info['meta_title'] : $product_info['name']);
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/localisation/language.php">
+        <operation>
+            <search position="replace" offset="2"><![CDATA[
+            $this->db->query("DELETE FROM " . DB_PREFIX . "information_description WHERE language_id = '" . (int)$language_id . "'");
+            ]]></search>
+            <add><![CDATA[
+            if (defined('TB_SEO_MOD') && class_exists('TB_Engine') && TB_Engine::hasInstance()) {
+                TB_Engine::instance()->getThemeData()->getItemLanguageKeywords('information_id');
+            }
+			]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/BurnEngine/template/module/language.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+            <a href="javascript:;"
+            ]]></search>
+            <add trim="true"><![CDATA[
+            <a href="<?php echo isset($language['current_url']) ? $language['current_url'] : 'javascript:;'; ?>"
+			]]></add>
+        </operation>
+    </file>
+
+</modification>

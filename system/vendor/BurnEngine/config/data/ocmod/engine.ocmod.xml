@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>BurnEngine</name>
+    <code>BurnEngine</code>
+    <version>{{version}}</version>
+    <author>ThemeBurn Ltd</author>
+    <link>http://www.themeburn.com</link>
+
+    <file path="admin/view/template/common/menu.tpl">
+        <operation>
+            <search><![CDATA[
+            <li id="catalog">
+            ]]></search>
+            <add position="before"><![CDATA[
+            <?php class_exists('TB_Engine') && TB_Engine::hasInstance() && print TB_Engine::instance()->getThemeData()->get('oc_admin_menu'); ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/catalog/product.php">
+        <operation>
+            <search><![CDATA[
+            public function getProducts($data = array()) {
+            ]]></search>
+            <add position="after"><![CDATA[
+            if (!empty($data['intercept_results'])) {
+                return array('dummy' => 'value');
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/module/latest.php">
+        <operation>
+            <search><![CDATA[
+            $filter_data = array(
+            ]]></search>
+            <add position="after"><![CDATA[
+            'intercept_results' => class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::instance()->getThemeData()->get('db_product_results'),
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            foreach ($results as $result) {
+            ]]></search>
+            <add position="before"><![CDATA[
+            if ($filter_data['intercept_results']) {
+                $results = TB_Engine::instance()->getThemeData()->get('db_product_results');
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="system/library/response.php">
+        <operation>
+            <search><![CDATA[
+            if ($this->output) {
+            ]]></search>
+            <add position="before"><![CDATA[
+            if (class_exists('TB_Engine') && TB_Engine::hasInstance()) {
+                $this->output = TB_Engine::instance()->getEventDispatcher()->filter(new sfEvent($this, 'ocResponse:output'), trim($this->output))->getReturnValue();
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            public function redirect($url, $status = 302) {
+            ]]></search>
+            <add position="after"><![CDATA[
+            if (class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::instance()->getThemeData()->disable_redirect) {
+                return;
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

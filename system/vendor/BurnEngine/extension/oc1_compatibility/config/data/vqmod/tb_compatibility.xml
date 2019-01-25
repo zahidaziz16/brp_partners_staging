@@ -1,0 +1,95 @@
+<modification>
+    <id>Third party extensions compatibility mod</id>
+    <version>1.2.6</version>
+    <vqmver>2.4.1</vqmver>
+    <author>ThemeBurn.com</author>
+
+    <file name="system/startup.php">
+        <operation>
+            <search position="after"><![CDATA[
+            error_reporting(E_ALL);
+            ]]></search>
+            <add><![CDATA[
+            define('TB_COMPATIBILITY_MOD', 1.0);
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/catalog/product.php">
+        <operation>
+            <search position="after"><![CDATA[
+            public function getProducts($data = array()) {
+            ]]></search>
+            <add><![CDATA[
+            if (!empty($data['intercept_results'])) {
+                return array('dummy' => 'value');
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/module/latest.php">
+        <operation>
+            <search position="after"><![CDATA[
+            $data = array(
+            ]]></search>
+            <add><![CDATA[
+            'intercept_results' => class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::instance()->getThemeData()->get('db_product_results'),
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            foreach ($results as
+            ]]></search>
+            <add><![CDATA[
+            if ($data['intercept_results']) {
+                $results = TB_Engine::instance()->getThemeData()->get('db_product_results');
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            $this->render();
+            ]]></search>
+            <add><![CDATA[
+            if (!empty($data['intercept_results'])) {
+                TB_Engine::instance()->getThemeData()->db_product_results = $this->data['products'];
+
+                return;
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/common/header.tpl">
+        <operation>
+            <search position="bottom"><![CDATA[]]></search>
+            <add><![CDATA[
+            <!-- END_COMMON_HEADER -->
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/common/footer.tpl">
+        <operation>
+            <search position="top"><![CDATA[]]></search>
+            <add><![CDATA[
+            <!-- BEGIN_COMMON_FOOTER -->
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="system/library/response.php">
+        <operation>
+            <search position="before"><![CDATA[
+            if ($this->output) {
+            ]]></search>
+            <add><![CDATA[
+            if (class_exists('TB_Engine') && TB_Engine::hasInstance()) {
+                $this->output = TB_Engine::instance()->getEventDispatcher()->filter(new sfEvent($this, 'ocResponse:output'), trim($this->output))->getReturnValue();
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

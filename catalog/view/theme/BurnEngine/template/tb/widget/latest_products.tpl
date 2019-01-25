@@ -1,0 +1,1 @@
+<?php require(tb_modification(dirname(__FILE__) . '/_products_listing.tpl')); ?>

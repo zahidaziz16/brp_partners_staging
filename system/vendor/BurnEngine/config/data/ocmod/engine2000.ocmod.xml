@@ -1,0 +1,21 @@
+<file path="system/library/request.php">
+    <operation>
+        <search><![CDATA[
+                public function __construct() {
+                ]]></search>
+        <add position="after"><![CDATA[
+                if (get_magic_quotes_gpc() && !version_compare(VERSION, '2.1.0.0', '>=')) {
+                    function stripslashes_deep($value) {
+                        $value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
+
+                        return $value;
+                    }
+
+                    $_POST = array_map('stripslashes_deep', $_POST);
+                    $_GET = array_map('stripslashes_deep', $_GET);
+                    $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
+                    $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
+                }
+                ]]></add>
+    </operation>
+</file>

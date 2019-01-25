@@ -1,0 +1,88 @@
+<modification>
+    <id>Stories</id>
+    <version>1.0.0</version>
+    <vqmver>2.5.0</vqmver>
+    <author>info@themeburn.com</author>
+    <file name="catalog/controller/common/seo_url.php">
+        <operation>
+            <search position="before"><![CDATA[
+            if ($url[0] == 'information_id') {
+            ]]></search>
+            <add><![CDATA[
+            if ($url[0] == 'story_id') {
+                $this->request->get['story_id'] = (int) $url[1];
+		unset($this->request->get['route']);
+
+                break;
+            }
+            if ($url[0] == 'story_tag_id') {
+                $this->request->get['story_tag_id'] = (int) $url[1];
+		unset($this->request->get['route']);
+
+                break;
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            if (isset($this->request->get['_route_'])) {
+            ]]></search>
+            <add><![CDATA[
+            $stories_keyword = '';
+            if (($stories_settings = $this->config->get('stories_settings')) && !empty($stories_settings['keyword'])) {
+                $stories_keyword = $stories_settings['keyword'];
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after" index="1"><![CDATA[
+            if ($query->num_rows && $query->row['keyword']) {
+            ]]></search>
+            <add><![CDATA[
+            if ($query->num_rows && ($data['route'] == 'stories/show' || $data['route'] == 'stories/tag')) {
+                if (($stories_settings = $this->config->get('stories_settings')) && !empty($stories_settings['keyword'])) {
+                    $url .= '/' . $stories_settings['keyword'] . '/' . $query->row['keyword'];
+                    unset($data[$key]);
+                    continue;
+                }
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            if (isset($this->request->get['product_id'])) {
+            ]]></search>
+            <add><![CDATA[
+            if ($stories_keyword && $this->request->get['_route_'] ==  $stories_keyword) {
+                $this->request->get['route'] =  'stories/index';
+            } else
+            if (isset($this->request->get['story_id'])) {
+                $this->request->get['route'] = 'stories/show';
+            } else
+            if (isset($this->request->get['story_tag_id'])) {
+                $this->request->get['route'] = 'stories/tag';
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            ($data['route'] == 'information/information' && $key == 'information_id')
+            ]]></search>
+            <add trim="true"><![CDATA[
+            ($data['route'] == 'information/information' && $key == 'information_id') || ($data['route'] == 'stories/show' && $key == 'story_id') || ($data['route'] == 'stories/tag' && $key == 'story_tag_id')
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            } elseif ($key == 'path') {
+            ]]></search>
+            <add><![CDATA[
+            } elseif (isset($data['route']) && $data['route'] == 'stories/index') {
+                if (($stories_settings = $this->config->get('stories_settings')) && !empty($stories_settings['keyword'])) {
+                    $url .=  '/' . $stories_settings['keyword'];
+                    unset($data[$key]);
+                }
+            ]]></add>
+        </operation>
+    </file>
+</modification>

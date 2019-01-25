@@ -1,0 +1,165 @@
+<?php
+// Heading
+$_['heading_warehouse_transaction'] = 'Storage'; // Warehouse Transactions
+$_['heading_warehouse_transaction_add'] = 'Add Transaction Header';
+$_['heading_warehouse_transaction_edit'] = 'Edit Transaction Header';
+$_['button_cancel']           		= 'Cancel';
+
+// Text
+$_['text_success']           		= 'Success: You have modified transaction!';
+$_['text_header_added_success']    	= 'Success: You have added transaction header!';
+$_['text_header_modified_success']  = 'Success: You have modified transaction header!';
+$_['text_delete_success']			= 'Success: You have deleted transaction(s)!';
+$_['text_cancel_success']			= 'Success: You have cancelled transaction(s)!';
+$_['text_header']            = 'Transaction Header';
+$_['text_list']              = 'Transaction List';
+$_['text_detail_list']       = 'Transaction Detail List';
+$_['text_add']               = 'Add Transaction';
+$_['text_edit']              = 'Edit Transaction';
+$_['text_plus']              = '+';
+$_['text_minus']             = '-';
+$_['text_default']           = 'Default';
+$_['text_option']            = 'Option';
+$_['text_option_value']      = 'Option Value';
+$_['text_percent']           = 'Percentage';
+$_['text_amount']            = 'Fixed Amount';
+$_['text_completed']         = 'Completed';
+$_['text_pending']           = 'Pending';
+$_['text_cancelled']         = 'Cancelled';
+$_['text_draft']      	     = 'Draft';
+
+// Column
+$_['column_transaction_type']	= 'Storage'; // Transaction Type
+$_['column_transaction_no']		= 'Transaction Number';
+$_['column_total_amount']		= 'Total Amount';
+$_['column_net_amount']			= 'Net Amount';
+$_['column_total_item_lines']	= 'No of Line Items';
+$_['column_received_datetime']	= 'Proposed Receiving Date/Time';
+$_['column_status']				= 'Status';
+$_['column_action']				= 'Action';
+$_['column_transaction_id']		= 'Transaction ID';
+$_['column_row_no']				= 'Row No';
+$_['column_product_id']			= 'Product ID';
+$_['column_product_name']		= 'Product Name';
+$_['column_product_model']		= 'Product Model';
+$_['column_product_type']		= 'Product Type';
+$_['column_transaction_type']	= 'Storage'; // Transaction Type
+$_['column_quantity']			= 'Quantity';
+$_['column_uom']				= 'UOM';
+$_['column_price']				= 'Price';
+$_['column_amount']				= 'Amount';
+$_['column_discount']			= 'Discount';
+$_['column_num_of_bin']			= 'Requested Number of Bin(s)';
+$_['column_actual_num_of_bin']	= 'Actual Number of Bin(s)';
+$_['column_remarks']			= 'Remarks';
+$_['column_product_status']		= 'Product Status';
+$_['column_sync_status']		= 'Sync Status';
+$_['column_ecowarehouse_sync_status']	= 'e-Commerce to Warehouse Sync Status';
+$_['column_warehouseeco_sync_status']	= 'Warehouse to e-Commerce Sync Status';
+
+
+// Entry
+$_['entry_transaction_type']	= 'Storage'; // Transaction Type
+$_['entry_transaction_date']	= 'Transaction Date';
+$_['entry_transaction_no']		= 'Transaction Number';
+$_['entry_description']			= 'Description';
+$_['entry_meta_title'] 	     = 'Meta Tag Title';
+$_['entry_meta_keyword'] 	 = 'Meta Tag Keywords';
+$_['entry_meta_description'] = 'Meta Tag Description';
+$_['entry_keyword']          = 'SEO URL';
+$_['entry_model']            = 'Model';
+$_['entry_sku']              = 'SKU';
+$_['entry_upc']              = 'UPC';
+$_['entry_ean']              = 'EAN';
+$_['entry_jan']              = 'JAN';
+$_['entry_isbn']             = 'ISBN';
+$_['entry_mpn']              = 'MPN';
+$_['entry_location']         = 'Location';
+$_['entry_shipping']         = 'Requires Shipping';
+$_['entry_manufacturer']     = 'Manufacturer';
+$_['entry_store']            = 'Stores';
+$_['entry_date_available']   = 'Date Available';
+$_['entry_quantity']         = 'Quantity';
+$_['entry_minimum']          = 'Minimum Quantity';
+$_['entry_stock_status']     = 'Out Of Stock Status';
+$_['entry_price']            = 'Price';
+$_['entry_tax_class']        = 'Tax Class';
+$_['entry_points']           = 'Points';
+$_['entry_option_points']    = 'Points';
+$_['entry_subtract']         = 'Subtract Stock';
+$_['entry_weight_class']     = 'Weight Class';
+$_['entry_weight']           = 'Weight';
+$_['entry_dimension']        = 'Dimensions (L x W x H)';
+$_['entry_length_class']     = 'Length Class';
+$_['entry_length']           = 'Length';
+$_['entry_width']            = 'Width';
+$_['entry_height']           = 'Height';
+$_['entry_image']            = 'Image';
+$_['entry_additional_image'] = 'Additional Images';
+$_['entry_customer_group']   = 'Customer Group';
+$_['entry_date_start']       = 'Date Start';
+$_['entry_date_end']         = 'Date End';
+$_['entry_priority']         = 'Priority';
+$_['entry_attribute']        = 'Attribute';
+$_['entry_attribute_group']  = 'Attribute Group';
+$_['entry_text']             = 'Text';
+$_['entry_option']           = 'Option';
+$_['entry_option_value']     = 'Option Value';
+$_['entry_required']         = 'Required';
+$_['entry_status']           = 'Status';
+$_['entry_ecowarehouse_sync_status']	= 'e-Commerce to Warehouse Sync Status';
+$_['entry_warehouseeco_sync_status']	= 'WMS Receiving Status';
+$_['entry_sort_order']       = 'Sort Order';
+$_['entry_category']         = 'Categories';
+$_['entry_filter']           = 'Filters';
+$_['entry_download']         = 'Downloads';
+$_['entry_related']          = 'Related Transactions';
+$_['entry_tag']          	 = 'Product Tags';
+$_['entry_reward']           = 'Reward Points';
+$_['entry_layout']           = 'Layout Override';
+$_['entry_recurring']        = 'Recurring Profile';
+$_['entry_product_name']	 = 'Product Name';
+$_['entry_product_model']	 = 'Product Model';
+$_['entry_product_type']	= 'Product Type';
+$_['entry_location_from']	= 'Location From';
+$_['entry_location_to']		= 'Location To';
+$_['entry_remarks']			= 'Remarks';
+$_['entry_received_datetime']	= 'Proposed Receiving Date/Time';
+$_['entry_num_of_bin']			= 'Requested Number of Bin(s)';
+$_['entry_actual_num_of_bin']	= 'Actual Number of Bin(s)';
+
+// Help
+$_['help_keyword']           = 'Do not use spaces, instead replace spaces with - and make sure the SEO URL is globally unique.';
+$_['help_sku']               = 'Stock Keeping Unit';
+$_['help_upc']               = 'Universal Product Code';
+$_['help_ean']               = 'European Article Number';
+$_['help_jan']               = 'Japanese Article Number';
+$_['help_isbn']              = 'International Standard Book Number';
+$_['help_mpn']               = 'Manufacturer Part Number';
+$_['help_manufacturer']      = '(Autocomplete)';
+$_['help_minimum']           = 'Force a minimum ordered amount';
+$_['help_stock_status']      = 'Status shown when a product is out of stock';
+$_['help_points']            = 'Number of points needed to buy this item. If you don\'t want this product to be purchased with points leave as 0.';
+$_['help_category']          = '(Autocomplete)';
+$_['help_filter']            = '(Autocomplete)';
+$_['help_download']          = '(Autocomplete)';
+$_['help_related']           = '(Autocomplete)';
+$_['help_tag']               = 'Comma separated';
+
+// Error
+$_['error_warning']          = 'Warning: Please check the form carefully for errors!';
+$_['error_permission']       = 'Warning: You do not have permission to modify transactions!';
+$_['error_transaction_type'] = 'Storage must be filled!'; // Transaction Type must be filled!
+$_['error_transaction_no']   = 'Transaction No must be filled!';
+$_['error_location_from'] 	 = 'Location From must be filled!';
+$_['error_location_to'] 	 = 'Location To must be filled!';
+$_['error_received_datetime']= 'Proposed Receiving Date/Time must be filled!';
+
+$_['error_name']             = 'Product Name must be greater than 3 and less than 255 characters!';
+$_['error_meta_title']       = 'Meta Title must be greater than 3 and less than 255 characters!';
+$_['error_model']            = 'Product Model must be greater than 1 and less than 64 characters!';
+$_['error_keyword']          = 'SEO URL already in use!';
+
+$_['sync_transaction']       			= 'Upload Receiving List';
+$_['sync_upload_receiving_list']		= 'Upload Receiving List';
+$_['sync_download_receiving_progress']	= 'Download Receiving Progress';

@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "Category Icons";
+  src:
+    url('category.woff') format('woff'),
+    url('category.ttf') format('truetype'),
+    url('category.svg#Flaticon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Category Icons";
+    src: url('category.svg#Flaticon') format('svg');
+  }
+}
+
+
+.ico-cat-,
+[class*="ico-cat-"]:before
+{
+  font-family: 'Category Icons' !important;
+  font-size: inherit;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  speak: none;
+}
+[class*="ico-cat-"],
+[class*="ico-cat-"]:before
+{
+  display: inline-block;
+  line-height: inherit;
+  text-align: center;
+  text-transform: none;
+  /* Better Font Rendering =========== */
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+}
+[class*="ico-cat-"]:before {
+  vertical-align: top;
+}
+
+.ico-cat-blender:before { content: "\f100"; }
+.ico-cat-camera:before { content: "\f101"; }
+.ico-cat-car:before { content: "\f102"; }
+.ico-cat-driller:before { content: "\f103"; }
+.ico-cat-gamepad:before { content: "\f104"; }
+.ico-cat-gamepad1:before { content: "\f105"; }
+.ico-cat-gamepad2:before { content: "\f106"; }
+.ico-cat-hairdryer:before { content: "\f107"; }
+.ico-cat-headphones:before { content: "\f108"; }
+.ico-cat-iron:before { content: "\f109"; }
+.ico-cat-laptop:before { content: "\f10a"; }
+.ico-cat-microwave:before { content: "\f10b"; }
+.ico-cat-monitor:before { content: "\f10c"; }
+.ico-cat-projector:before { content: "\f10d"; }
+.ico-cat-radio:before { content: "\f10e"; }
+.ico-cat-shaver:before { content: "\f10f"; }
+.ico-cat-smartphone:before { content: "\f110"; }
+.ico-cat-speaker:before { content: "\f111"; }
+.ico-cat-tv1:before { content: "\f112"; }
+.ico-cat-tv2:before { content: "\f113"; }
+.ico-cat-videorecorder:before { content: "\f114"; }
+.ico-cat-videorecorder1:before { content: "\f115"; }
+.ico-cat-washingmachine:before { content: "\f116"; }

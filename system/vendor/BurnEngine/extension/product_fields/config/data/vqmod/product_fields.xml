@@ -1,0 +1,97 @@
+<modification>
+    <id>BurnEngine Custom Product Fields</id>
+    <version>1.2.6</version>
+    <vqmver>2.5.1</vqmver>
+    <author>ThemeBurn.com</author>
+
+    <file name="admin/view/template/catalog/product_form.tpl">
+        <operation>
+            <search position="after" offset="2"><![CDATA[
+            <td><textarea name="product_description[<?php echo $language['language_id']; ?>][description]
+            ]]></search>
+            <add><![CDATA[
+            <?php if (!empty($product_fields)): foreach ($product_fields as $field): ?>
+            <tr>
+                <td><?php echo $field['block_name']; ?></td>
+                <td><textarea name="product_fields[<?php echo $field['id']; ?>][content][<?php echo $language['language_id']; ?>]" id="product_field_<?php echo $field['id']; ?>_<?php echo $language['language_id']; ?>"><?php echo $field['content'][$language['language_id']]; ?></textarea></td>
+            </tr>
+            <?php endforeach; endif; ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before" index="1"><![CDATA[
+            <script type="text/javascript"><!--
+            ]]></search>
+            <add><![CDATA[
+            <script type="text/javascript">
+            <?php if (!empty($product_fields)): foreach ($product_fields as $field): ?>
+            <?php foreach ($languages as $language) { ?>
+            CKEDITOR.replace('product_field_<?php echo $field['id']; ?>_<?php echo $language['language_id']; ?>', {
+                filebrowserBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+                filebrowserImageBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+                filebrowserUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+                filebrowserImageUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>'
+            });
+            <?php } ?>
+            <?php endforeach; endif; ?>
+            </script>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/catalog/product.php">
+        <operation>
+            <search position="before"><![CDATA[
+            if (isset($this->request->post['product_description'])) {
+            ]]></search>
+            <add><![CDATA[
+            $product_id = isset($this->request->get['product_id']) ? (int) $this->request->get['product_id'] : null;
+            $product_fields = TB_Engine::instance()->getThemeData()->getProductFields($product_id);
+            if (isset($this->request->post['product_fields'])) {
+                foreach ($product_fields as &$field) {
+                    if (!isset($this->request->post['product_fields'][$field['id']])) {
+                        continue;
+                    }
+                    $field['content'] = array_replace($field['content'], $this->request->post['product_fields'][$field['id']]['content']);
+                }
+            }
+            $this->data['product_fields'] = $product_fields;
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/catalog/product.php">
+        <operation>
+            <search position="after"><![CDATA[
+            $product_id = $this->db->getLastId();
+            ]]></search>
+            <add><![CDATA[
+            if (defined('TB_PRODUCT_FIELDS_MOD') && class_exists('TB_Engine') && TB_Engine::hasInstance() && !empty($data['product_fields'])) {
+                TB_Engine::instance()->getThemeData()->addProductFields($product_id, $data['product_fields']);
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            public function editProduct($product_id, $data) {
+            ]]></search>
+            <add><![CDATA[
+            if (defined('TB_PRODUCT_FIELDS_MOD') && class_exists('TB_Engine') && TB_Engine::hasInstance() && !empty($data['product_fields'])) {
+                TB_Engine::instance()->getThemeData()->addProductFields($product_id ,$data['product_fields']);
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="system/engine/loader.php">
+        <operation>
+            <search position="before"><![CDATA[
+            final class Loader {
+            ]]></search>
+            <add><![CDATA[
+            define('TB_PRODUCT_FIELDS_MOD', true);
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

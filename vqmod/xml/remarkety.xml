@@ -1,0 +1,19 @@
+<modification>
+	<id>brp</id>
+	<version>oc23.1.1.15</version>
+	<vqmver>oc23.1.1.15</vqmver>
+	<author>Remarkety</author>
+
+	<file name="system/library/customer.php">
+		<operation error="skip">
+			<search position="before"><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");]]></search>
+			<add><![CDATA[$this->registry = $registry; $loader = $registry->get('load'); $loader->model('module/remarkety'); $registry->get('model_module_remarkety')->markCartIfChanged();]]></add>
+		</operation>
+		
+		<operation error="skip">
+			<search position="before"><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "'");]]></search>
+			<add><![CDATA[$loader = $this->registry->get('load'); $loader->model('module/remarkety'); $this->registry->get('model_module_remarkety')->markCartIfChanged();]]></add>
+		</operation>
+	</file>
+	
+</modification>

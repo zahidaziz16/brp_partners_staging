@@ -1,0 +1,38 @@
+<file path="catalog/controller/startup/seo_url.php">
+    <operation>
+        <search><![CDATA[
+            if (isset($this->request->get['_route_'])) {
+            ]]></search>
+        <add position="before"><![CDATA[
+            if (class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::instance()->getContext()->getArea() == 'catalog' && TB_Engine::instance()->getThemeData()->route) {
+                return;
+            }
+            ]]></add>
+    </operation>
+</file>
+
+<file path="catalog/controller/module/latest.php">
+    <operation>
+        <search><![CDATA[
+        $this->load->view(
+        ]]></search>
+        <add position="before"><![CDATA[
+        if (!empty($filter_data['intercept_results'])) {
+            TB_Engine::instance()->getThemeData()->db_product_results = $data['products'];
+
+            return;
+        }
+        ]]></add>
+    </operation>
+</file>
+
+<file path="system/engine/event.php">
+    <operation>
+        <search><![CDATA[
+                $this->registry = $registry;
+                ]]></search>
+        <add position="after"><![CDATA[
+                defined('VERSION') && version_compare(VERSION, '2.2.0.0', '>=') && $this->register('model/extension/event/getEvents/after', new Action('common/BurnEngine/onGetEventsAfter'));
+                ]]></add>
+    </operation>
+</file>

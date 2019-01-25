@@ -1,0 +1,240 @@
+/*****************************************************/
+/*****   R E S E T   *********************************/
+/*****************************************************/
+
+*, td, th, input, textarea, select {
+  margin: 0;
+  padding: 0;
+  line-height: inherit;
+  font-family: inherit;
+  font-size: 100%;
+}
+img {
+  display: block;
+  line-height: 0;
+  font-size: 0;
+  -ms-interpolation-mode: bicubic;
+}
+img,
+a img
+{
+  border: 0;
+}
+a,
+a:active,
+a:hover,
+a:focus,
+a:visited,
+label,
+label:active,
+label:hover,
+label:focus,
+input:focus,
+textarea:focus
+{
+  outline: none !important;
+  text-decoration: none;
+}
+a,
+button,
+input[type=submit],
+input[type=button],
+input[type=reset]
+{
+  cursor: pointer;
+}
+table {
+  border-collapse: collapse;
+}
+table td, table th {
+  padding: 0;
+}
+ul {
+  list-style: none;
+}
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0 none;
+}
+
+/*** Clearfix ***/
+.clearfix:before,
+.clearfix:after
+{
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+
+
+
+/*****************************************************/
+/*****   L A Y O U T   *******************************/
+/*****************************************************/
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+* {
+  font: 13px/20px "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  color: #333;
+}
+label {
+  line-height: 20px;
+  cursor: default;
+}
+label[for] {
+  cursor: pointer;
+}
+.s_hidden,
+input[type=hidden]
+{
+  display: none;
+}
+input[type=text],
+input[type=password],
+textarea,
+select
+{
+  max-width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 20px;
+  color: #333;
+  background: #eee;
+  border: 1px solid #ddd;
+  border-color: #c0c0c0 #e6e6e6 #e6e6e6 #c0c0c0;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.07);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+option {
+  font-size: 13px;
+  font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+input[type=text],
+input[type=password]
+{
+  height: 30px;
+  padding: 0 5px !important;
+}
+select {
+  height: 30px;
+  max-width: 100%;
+  padding: 4px !important;
+}
+select option[disabled="disabled"] {
+  color: #ccc;
+}
+select option[global] {
+  font-size: 14px;
+  font-weight: 600;
+}
+textarea {
+  overflow-x: hidden;
+  padding: 4px 5px !important;
+}
+input[type=checkbox],
+input[type=radio]
+{
+  vertical-align: middle;
+}
+input[type=text]:hover:not(.s_button),
+input[type=password]:hover,
+textarea:hover,
+select:hover
+{
+  border-color: #999 #ddd #ddd #aaa;
+}
+input[type=text]:focus,
+input[type=password]:focus,
+textarea:focus,
+select:focus
+{
+  border-color: #999 #ddd #ddd #aaa;
+}
+input[type=text][disabled],
+input[type=password][disabled]
+{
+  text-shadow: 0 1px 0 #fff;
+  color: #999 !important;
+}
+input[type=text][disabled]:hover,
+input[type=password][disabled]:hover
+{
+  background: #eee;
+  border: 1px solid #ddd;
+  border-color: #c0c0c0 #e6e6e6 #e6e6e6 #c0c0c0;
+}
+
+
+/*****************************************************/
+/*****   I C O N S   *********************************/
+/*****************************************************/
+
+.tb_label {
+  clear: both;
+  display: block;
+  float: none;
+  width: 100%;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  color: #ff6100;
+}
+.tb_label:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+#tb_icon_filter {
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+#tb_icon_filter label {
+  display: inline-block;
+}
+#tb_glyph_symbols {
+  overflow: auto;
+  display: block;
+  height: 375px;
+  margin: 20px;
+}
+.tb_icon {
+  display: block;
+  float: left;
+  width: 53px;
+  height: 53px;
+  line-height: 54px;
+  text-align: center;
+  cursor: pointer;
+}
+.tb_icon .tb_icon_preview {
+  margin-top: -2px;
+  vertical-align: middle;
+  font-size: 21px;
+}
+.tb_icon:hover .tb_icon_preview {
+  font-size: 28px;
+}
+.tb_icon h3 {
+  display: none;
+}
+
+/*** temp ***/
+br,
+br + small
+{
+  display: none;
+}
+
+
+
+
+

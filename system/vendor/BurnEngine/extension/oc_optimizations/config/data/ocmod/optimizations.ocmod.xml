@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>BurnEngine `OpenCart Performance+`</name>
+    <code>tbOptimizations</code>
+    <version>{{version}}</version>
+    <author>ThemeBurn Ltd</author>
+    <link>http://www.themeburn.com</link>
+
+    <file path="system/engine/loader.php">
+        <operation>
+            <search><![CDATA[
+            final class Loader {
+            ]]></search>
+            <add position="before"><![CDATA[
+            !defined('TB_OPTIMIZATIONS_MOD') && define('TB_OPTIMIZATIONS_MOD', 1.0);
+            !defined('TB_OPTIMIZATIONS_COMPATIBILITY') && define('TB_OPTIMIZATIONS_COMPATIBILITY', serialize(array()));
+            !defined('TB_OPTIMIZATIONS_DATABASE') && define('TB_OPTIMIZATIONS_DATABASE', serialize(array(
+                'cache_db'    => 0,
+                'cache_items' => array(
+                    'products_sql'     => array('label' => 'Products SQL'         , 'default' => 0, 'ttl' => 5),
+                    'categories_sql'   => array('label' => 'Categories SQL'       , 'default' => 1, 'ttl' => 180),
+                    'information_sql'  => array('label' => 'Information pages SQL', 'default' => 0, 'ttl' => 180),
+                    'manufacturer_sql' => array('label' => 'Manufacturers SQL'    , 'default' => 0, 'ttl' => 180),
+                    'url_level_1'      => array('label' => 'SEO Urls SQL Level 1' , 'default' => 1, 'ttl' => 180),
+                    'url_level_2'      => array('label' => 'SEO Urls SQL Level 2' , 'default' => 1, 'ttl' => 180),
+                    'other_sql'        => array('label' => 'Other SQL'            , 'default' => 0, 'ttl' => 30)
+                )
+            )));
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/common/seo_url.php">
+        <operation>
+            <search><![CDATA[
+            class ControllerCommonSeoUrl extends Controller {
+            ]]></search>
+            <add position="before"><![CDATA[
+            class DbDecorator
+            {
+                private $db;
+                private static $results = array();
+                private static $escaped = array();
+
+                public function __construct($db)
+                {
+                    $this->db = $db;
+                }
+
+                public function query($sql)
+                {
+                    $h = md5($sql);
+                    if (!isset(self::$results[$h])) {
+                        self::$results[$h] = $this->db->query($sql);
+                    }
+
+                    return self::$results[$h];
+                }
+
+                public function escape($string)
+                {
+                    if (!isset(self::$escaped[$string])) {
+                        self::$escaped[$string] = $this->db->escape($string);
+                    }
+
+                    return self::$escaped[$string];
+                }
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            class ControllerCommonSeoUrl extends Controller {
+            ]]></search>
+            <add position="after"><![CDATA[
+            private $db;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            public function index() {
+            ]]></search>
+            <add position="before"><![CDATA[
+            public function __construct($registry) {
+                parent::__construct($registry);
+                if ($registry->get('tbEngine')) {
+                    $theme_settings = TB_Engine::instance()->getThemeModel()->getSettings();
+                    if (!isset($theme_settings['system']['cache_url_level_1']) || $theme_settings['system']['cache_url_level_1']) {
+                        $this->db = new DbDecorator($registry->get('db'));
+                    }
+                }
+
+                if (null === $this->db) {
+                    $this->db = $registry->get('db');
+                }
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="system/library/db.php">
+        <operation>
+            <search><![CDATA[
+            public function query($sql
+            ]]></search>
+            <add position="after"><![CDATA[
+            static $cache_db;
+
+			if (null === $cache_db && class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::instance()->isExtensionInstalled('oc_optimizations')) {
+				$cache_db = TB_Engine::instance()->getExtension('oc_optimizations')->getModel('default')->getCache(version_compare(VERSION, '2.2.0.0', '>=') ? $this->adaptor : $this->db);
+			}
+
+            if (false !== $cache_db && null !== $cache_db) {
+                $result = $cache_db->getResult($sql);
+	            if (null !== $result) {
+		            return $result;
+	            }
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="system/library/url.php">
+        <operation>
+            <search><![CDATA[
+            private $ssl;
+            ]]></search>
+            <add position="before" trim="true"><![CDATA[
+            private static $url_map = null;
+            public static $current_language_id = null;
+            public static $enable_cache = null;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            foreach ($this->rewrite as $rewrite) {
+            ]]></search>
+            <add position="before"><![CDATA[
+            if (self::$enable_cache) {
+                if (null === self::$current_language_id) {
+                    self::$current_language_id = TB_Engine::ocConfig('config_language_id');
+                }
+                if (null === self::$url_map || self::$current_language_id != TB_Engine::ocConfig('config_language_id')) {
+                    $cache_key = 'url_map_' . TB_Engine::ocConfig('config_store_id') . '_' . TB_Engine::ocConfig('config_language_id');
+                    self::$url_map = (array) TB_Engine::OcRegistry()->get('tbEngine')->getCacheVar($cache_key, null, array(), null, true);
+                    TB_Engine::OcRegistry()->set('url_map', self::$url_map);
+                    TB_Engine::OcRegistry()->set('save_url_map', false);
+                }
+                if (null !== self::$url_map && isset(self::$url_map[$url])) {
+                    return self::$url_map[$url];
+                }
+            }
+            $original_url = $url;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            return $url;
+            ]]></search>
+            <add position="before"><![CDATA[
+            if (self::$enable_cache && null !== self::$url_map && $original_url != $url) {
+                self::$url_map[$original_url] = $url;
+                TB_Engine::OcRegistry()->set('url_map', self::$url_map);
+                TB_Engine::OcRegistry()->set('save_url_map', true);
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="system/library/response.php">
+        <operation>
+            <search><![CDATA[
+            echo $output;
+            ]]></search>
+            <add position="before"><![CDATA[
+            if (class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::OcRegistry()->get('save_url_map')) {
+                $config = TB_Engine::ocConfig();
+                $cache_key = 'url_map_' . $config->get('config_store_id') . '_' . $config->get('config_language_id');
+                $url_map = TB_Engine::OcRegistry()->get('url_map');
+                TB_Engine::OcRegistry()->get('tbEngine')->setCacheVar($cache_key, $url_map);
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

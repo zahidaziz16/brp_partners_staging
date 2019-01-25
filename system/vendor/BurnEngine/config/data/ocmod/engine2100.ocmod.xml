@@ -1,0 +1,73 @@
+<file path="catalog/controller/common/seo_url.php">
+    <operation>
+        <search><![CDATA[
+            if (isset($this->request->get['_route_'])) {
+            ]]></search>
+        <add position="before"><![CDATA[
+            if (class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::instance()->getContext()->getArea() == 'catalog' && TB_Engine::instance()->getThemeData()->route) {
+                return;
+            }
+            ]]></add>
+    </operation>
+</file>
+
+<file path="system/engine/front.php">
+    <operation>
+        <search><![CDATA[
+        $this->pre_action[] = $pre_action;
+        ]]></search>
+        <add position="before"><![CDATA[
+        $ref = new ReflectionObject($pre_action);
+        $f = $ref->getProperty('file');
+        $f->setAccessible(true);
+        if (basename($f->getValue($pre_action)) == 'maintenance.php' && !(isset($this->registry->get('request')->get['route']) && 0 === strpos($this->registry->get('request')->get['route'], 'api'))) {
+            $this->dispatch(new Action('common/BurnEngine'), new Action('error/not_found'));
+        }
+        ]]></add>
+    </operation>
+    <operation>
+        <search><![CDATA[
+        $this->registry = $registry;
+        ]]></search>
+        <add position="after"><![CDATA[
+        // Ensure we are in admin area
+        if (defined('HTTP_CATALOG')) {
+            if (is_dir(DIR_SYSTEM . 'vendor/BurnEngine') && file_exists(DIR_APPLICATION . 'controller/module/BurnEngine.php')) {
+                define('TB_BASENAME', 'BurnEngine');
+                require_once(DIR_APPLICATION . 'controller/module/BurnEngine.php');
+                $store_id = isset($registry->get('request')->request['store_id']) ? (int) $registry->get('request')->request['store_id'] : 0;
+                TB_AdminDispatcher::getInstance($registry, 'BurnEngine', $store_id);
+            }
+        }
+        ]]></add>
+    </operation>
+</file>
+
+<file path="system/engine/loader.php">
+    <operation>
+        <search><![CDATA[
+        public function view(
+        ]]></search>
+        <add position="after" trim="true"><![CDATA[
+        if (null != ($tbEngine = $this->registry->get('tbEngine')) && $tbEngine->getContext()->getArea() == 'catalog' && $tbEngine->isThemeExtensionLoaded()) {
+            $data['tbData'] = $tbEngine->getThemeExtension()->getDataBag();
+        }
+        ]]></add>
+    </operation>
+</file>
+
+
+<file path="catalog/controller/module/latest.php">
+    <operation>
+        <search><![CDATA[
+        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/latest.tpl')) {
+        ]]></search>
+        <add position="before"><![CDATA[
+        if (!empty($filter_data['intercept_results'])) {
+            TB_Engine::instance()->getThemeData()->db_product_results = $data['products'];
+
+            return;
+        }
+        ]]></add>
+    </operation>
+</file>

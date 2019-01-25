@@ -1,0 +1,21 @@
+<file path="system/engine/front.php">
+    <operation>
+        <search><![CDATA[
+        $result = $this->execute($pre_action);
+        ]]></search>
+        <add position="after"><![CDATA[
+         $this->registry->get('event')->trigger('controller/' . $pre_action->getId() . '/after', array($pre_action->getId()));
+        ]]></add>
+    </operation>
+</file>
+
+<file path="admin/view/template/common/column_left.tpl">
+    <operation>
+        <search><![CDATA[
+        <?php foreach ($menus as $menu) { ?>
+        ]]></search>
+        <add position="after"><![CDATA[
+        <?php $menu['id'] == 'menu-catalog' && class_exists('TB_Engine') && TB_Engine::hasInstance() && print TB_Engine::instance()->getThemeData()->get('oc_admin_menu'); ?>
+        ]]></add>
+    </operation>
+</file>

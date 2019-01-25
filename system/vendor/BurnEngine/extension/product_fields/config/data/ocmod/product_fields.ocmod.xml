@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>BurnEngine `Custom Product Fields`</name>
+    <code>tbProductFields</code>
+    <version>{{version}}</version>
+    <author>ThemeBurn Ltd</author>
+    <link>http://www.themeburn.com</link>
+
+    <file path="admin/view/template/catalog/product_form.tpl">
+        <operation>
+            <search><![CDATA[
+            <?php echo $entry_meta_title; ?></label>
+            ]]></search>
+            <add position="before" offset="1"><![CDATA[
+            <?php if (!empty($product_fields)): foreach ($product_fields as $field): ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="product_field_<?php echo $field['id']; ?>_<?php echo $language['language_id']; ?>"><?php echo $field['block_name']; ?></label>
+                <div class="col-sm-10">
+                  <textarea name="product_fields[<?php echo $field['id']; ?>][content][<?php echo $language['language_id']; ?>]" placeholder="<?php echo $entry_description; ?>" id="product_field_<?php echo $field['id']; ?>_<?php echo $language['language_id']; ?>" class="form-control summernote"><?php echo $field['content'][$language['language_id']]; ?></textarea>
+                </div>
+            </div>
+            <?php endforeach; endif; ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+			<?php echo $footer; ?>
+			]]></search>
+            <add position="before"><![CDATA[
+            <?php if (!empty($product_fields)): ?>
+            <script type="text/javascript">
+            <?php foreach ($languages as $language): ?>
+                <?php foreach ($product_fields as $field): ?>
+                $('#product_field_<?php echo $field['id']; ?>_<?php echo $language['language_id']; ?>').summernote({height:200});
+                <?php endforeach ?>
+            <?php endforeach; ?>
+            </script>
+            <?php endif; ?>
+			]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/catalog/product.php">
+        <operation>
+            <search><![CDATA[
+            if (isset($this->request->post['product_description'])) {
+            ]]></search>
+            <add position="before"><![CDATA[
+            $product_id = isset($this->request->get['product_id']) ? (int) $this->request->get['product_id'] : null;
+            $product_fields = TB_Engine::instance()->getThemeData()->getProductFields($product_id);
+            if (isset($this->request->post['product_fields'])) {
+                foreach ($product_fields as &$field) {
+                    if (!isset($this->request->post['product_fields'][$field['id']])) {
+                        continue;
+                    }
+                    $field['content'] = array_replace($field['content'], $this->request->post['product_fields'][$field['id']]['content']);
+                }
+            }
+            $data['product_fields'] = $product_fields;
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/model/catalog/product.php">
+        <operation>
+            <search><![CDATA[
+            $product_id = $this->db->getLastId();
+            ]]></search>
+            <add position="after"><![CDATA[
+            if (defined('TB_PRODUCT_FIELDS_MOD') && class_exists('TB_Engine') && TB_Engine::hasInstance() && !empty($data['product_fields'])) {
+                TB_Engine::instance()->getThemeData()->addProductFields($product_id, $data['product_fields']);
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            public function editProduct($product_id, $data) {
+            ]]></search>
+            <add position="after"><![CDATA[
+            if (defined('TB_PRODUCT_FIELDS_MOD') && class_exists('TB_Engine') && TB_Engine::hasInstance() && !empty($data['product_fields'])) {
+                TB_Engine::instance()->getThemeData()->addProductFields($product_id ,$data['product_fields']);
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="system/engine/loader.php">
+        <operation>
+            <search><![CDATA[
+            final class Loader {
+            ]]></search>
+            <add position="before"><![CDATA[
+            define('TB_PRODUCT_FIELDS_MOD', true);
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

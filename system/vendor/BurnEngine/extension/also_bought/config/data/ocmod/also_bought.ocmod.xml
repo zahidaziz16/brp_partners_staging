@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>BurnEngine `Also Bought Products`</name>
+    <code>tbExtensionAlsoBought</code>
+    <version>{{version}}</version>
+    <author>ThemeBurn Ltd</author>
+    <link>http://www.themeburn.com</link>
+
+    <file path="catalog/model/checkout/order.php">
+        <operation>
+            <search><![CDATA[
+            $this->load->model('tool/upload');
+            ]]></search>
+            <add position="before"><![CDATA[
+            defined('TB_ALSO_BOUGHT_MOD') && class_exists('TB_Engine') && TB_Engine::hasInstance() && TB_Engine::instance()->getThemeData()->updateBoughtCombinations(array_column($order_product_query->rows, 'product_id'));
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="system/engine/loader.php">
+        <operation>
+            <search><![CDATA[
+            final class Loader {
+            ]]></search>
+            <add position="before"><![CDATA[
+            define('TB_ALSO_BOUGHT_MOD', true);
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

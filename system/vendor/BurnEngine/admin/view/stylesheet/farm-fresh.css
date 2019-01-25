@@ -1,0 +1,35 @@
+@charset "utf-8";
+/* CSS Document */
+
+.s_icon.s_advertising_16, .s_advertising_16:before {background-image: url(../image/icons/farm-fresh/16x16/advertising.png);}
+.s_icon.s_credit_16, .s_credit_16:before {background-image: url(../image/icons/farm-fresh/16x16/creditcards.png);}
+.s_icon.s_basket_16, .s_basket_16:before {background-image: url(../image/icons/farm-fresh/16x16/basket.png);}
+.s_icon.s_box_16, .s_box_16:before {background-image: url(../image/icons/farm-fresh/16x16/box.png);}
+.s_icon.s_cart_16, .s_cart_16:before {background-image: url(../image/icons/farm-fresh/16x16/cart.png);}
+.s_icon.s_color_wheel_16, .s_color_wheel_16:before {background-image: url(../image/icons/farm-fresh/16x16/color_wheel.png);}
+.s_icon.s_contact_email_16, .s_contact_email_16:before {background-image: url(../image/icons/farm-fresh/16x16/contact_email.png);}
+.s_icon.s_cross_16, .s_cross_16:before {background-image: url(../image/icons/farm-fresh/16x16/cross.png);}
+.s_icon.s_css_16, .s_css_16:before {background-image: url(../image/icons/farm-fresh/16x16/css.png);}
+.s_icon.s_database_add_16, .s_database_add_16:before {background-image: url(../image/icons/farm-fresh/16x16/database_add.png);}
+.s_icon.s_image_16, .s_image_16 {background-image: url(../image/icons/farm-fresh/16x16/picture.png);}
+.s_icon.s_images_16, .s_images_16 {background-image: url(../image/icons/farm-fresh/16x16/images.png);}
+.s_icon.s_layout_16, .s_layout_16 {background-image: url(../image/icons/farm-fresh/16x16/layout.png);}
+.s_icon.s_layout_footer_16, .s_layout_footer_16 {background-image: url(../image/icons/farm-fresh/16x16/layout_footer.png);}
+.s_icon.s_page_white_edit_16, .s_page_white_edit_16 {background-image: url(../image/icons/farm-fresh/16x16/page_white_edit.png);}
+.s_icon.s_palette_16, .s_palette_16 {background-image: url(../image/icons/farm-fresh/16x16/palette.png);}
+.s_icon.s_paypal_16, .s_paypal_16 {background-image: url(../image/icons/farm-fresh/16x16/paypal.png);}
+.s_icon.s_phone_16, .s_phone_16 {background-image: url(../image/icons/farm-fresh/16x16/phone.png);}
+.s_icon.s_picture_16, .s_picture_16 {background-image: url(../image/icons/farm-fresh/16x16/picture.png);}
+.s_icon.s_pictures_16, .s_pictures_16 {background-image: url(../image/icons/farm-fresh/16x16/pictures.png);}
+.s_icon.s_plugin_16, .s_plugin_16 {background-image: url(../image/icons/farm-fresh/16x16/plugin.png);}
+.s_icon.s_style_16, .s_style_16:before {background-image: url(../image/icons/farm-fresh/16x16/style.png);}
+.s_icon.s_tick_16, .s_tick_16:before {background-image: url(../image/icons/farm-fresh/16x16/tick.png);}
+.s_icon.s_wrench_orange_16, .s_wrench_orange_16:before {background-image: url(../image/icons/farm-fresh/16x16/wrench_orange.png);}
+.s_icon.s_page_white_code_16, .s_page_white_code_16:before {background-image: url(../image/icons/farm-fresh/16x16/page_white_code.png);}
+.s_icon.s_info_16, .s_info_16:before {background-image: url(../image/icons/farm-fresh/16x16/information.png);}
+.s_icon.s_cog_16, .s_cog_16:before {background-image: url(../image/icons/farm-fresh/16x16/cog.png);}
+.s_icon.s_group_16, .s_group_16:before {background-image: url(../image/icons/farm-fresh/16x16/group.png);}
+
+.s_icon.s_error_32, .s_error_32:before {background-image: url(../image/icons/farm-fresh/32x32/error.png);}
+.s_icon.s_accept_32, .s_accept_32:before {background-image: url(../image/icons/farm-fresh/32x32/accept.png);}
+.s_icon.s_cancel_32, .s_cancel_32:before {background-image: url(../image/icons/farm-fresh/32x32/cancel.png);}

@@ -1,0 +1,51 @@
+<?php
+
+return array(
+    'label'        => 'System page name',
+    'route'        => 'product/category',
+    'display'      => false,                // Show the scope in Page Builder
+    'ssl'          => false,                // Sets the page to be SSL encrypted
+    'merge_global' => array('header'),      // Which system blocks to get from global settings. Can be true or array('header', 'intro', 'content', 'footer')
+    'widgets'      => array(
+        0 => array(
+            'label'  => 'Breadcrumbs',
+            'slot'   => 'breadcrumbs',
+            'areas'  => 'intro, content, column_left, column_right',    // Set the Page Builder area that the block will be available for
+            'class'  => 'Theme_BreadcrumbsSystemWidget',                // Set custom widget class for the block
+            'locked' => false
+        ),
+        1 => array(
+            'label'  => 'Page title',
+            'slot'   => 'page_title',
+            'areas'  => 'intro, content, column_left, column_right',
+            'class'  => 'Theme_PageTitleSystemWidget',
+            'locked' => false
+        ),
+    ),
+    // Append content to GLOBAL defaults in Page Builder
+    'append_defaults' => array(
+        'content' => array(
+            'rows' => array(
+                0 => array(
+                    'columns' => array(
+                        0 => array(
+                            'grid_proportion' => '1_1',
+                            'widgets' => array(
+                                0 => array(
+                                    'label'    => 'Products',
+                                    'slot'     => 'products',
+                                    'settings' => array()
+                                )
+                            )
+                        )
+                    ),
+                    'settings' => array(
+                        'layout' => array(
+                            'margin_bottom'   => 0,
+                        )
+                    )
+                )
+            )
+        )
+    )
+);
