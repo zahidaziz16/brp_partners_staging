@@ -1,2 +1,2 @@
-# brp_partners_dev
+# brp_partners_staging
 Development/Staging
