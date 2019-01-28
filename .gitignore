@@ -13,7 +13,8 @@ system/cache/
 system/logs/
 
 system/storage/
-cron
+cron/auto_sync_all.php
+cron/cronjob_sync.php
 
 # vQmod log files
 vqmod/logs/*
@@ -21,6 +22,7 @@ vqmod/logs/*
 vqmod/vqcache/*
 vqmod/checked.cache
 vqmod/mods.cache
+vqmod
 
 #opencart ignore
 image/
